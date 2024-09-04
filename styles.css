@@ -1,0 +1,445 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #151515;
+  transition: background-color 0.3s ease;
+}
+
+/* Navbar Styling */
+.navbar {
+  width: 100%;
+  height: 50px;
+  background-color: black;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  padding: 0 50px;
+  height: 100%;
+  color: white;
+  font-family: "Sen", sans-serif;
+  transition: color 0.3s ease;
+}
+
+.logo-container {
+  flex: 1;
+}
+
+.logo {
+  font-size: 30px;
+  color: #4dbf00;
+  transition: color 0.3s ease;
+}
+
+.menu-container {
+  flex: 6;
+}
+
+.menu-list {
+  display: flex;
+  list-style: none;
+}
+
+.menu-list-item {
+  margin-right: 30px;
+  position: relative;
+}
+
+.menu-list-item a {
+  text-decoration: none;
+  color: white; /* Default color for dark mode */
+  font-weight: bold;
+  padding: 10px;
+  display: block;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.menu-list-item a:hover {
+  color: #4dbf00;
+  transform: translateY(-2px);
+}
+
+.menu-list-item.active a {
+  color: #4dbf00;
+  font-weight: bold;
+}
+
+.menu-list-item::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: #4dbf00;
+  left: 50%;
+  bottom: -5px;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.menu-list-item:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Light Mode Overrides */
+.container.active .navbar {
+  background-color: white;
+}
+
+.container.active .navbar-container {
+  color: black; /* Text color for light mode */
+}
+
+.container.active .menu-list-item a {
+  color: black; /* Link color for light mode */
+}
+
+.container.active .menu-list-item a:hover {
+  color: #4dbf00; /* Hover color for light mode */
+}
+
+/* Profile Section */
+.profile-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.profile-text-container {
+  margin-right: 10px;
+  color: white;
+}
+
+.profile-picture-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-picture {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.profile-picture:hover {
+  transform: scale(1.1);
+}
+
+.logout-popup {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: #333;
+  border-radius: 5px;
+  padding: 10px;
+  display: none;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.profile-picture-container:hover .logout-popup {
+  display: block;
+}
+
+.logout-button {
+  background-color: #4dbf00;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #3da500;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(-10px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* Sidebar Styling */
+/* Sidebar Styling */
+.sidebar {
+  width: 50px;
+  height: 100%;
+  background-color: black;
+  position: fixed;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  transition: background-color 0.3s ease;
+}
+
+.left-menu-icon-wrapper {
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-menu-icon {
+  color: white;
+  font-size: 24px;
+  transition: color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Hover Effect for Icons */
+.left-menu-icon-wrapper:hover .left-menu-icon {
+  color: #4dbf00; /* Change icon color on hover */
+  transform: scale(1.2); /* Slightly increase the size on hover */
+}
+
+/* Tooltip Styling */
+.left-menu-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 60px; /* Position tooltip to the right of the icon */
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.left-menu-icon-wrapper:hover .left-menu-icon::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(10px); /* Slide tooltip in on hover */
+}
+
+/* Light Mode Overrides for Sidebar */
+.container.active .sidebar {
+  background-color: white;
+}
+
+.container.active .left-menu-icon {
+  color: black;
+}
+
+/* Light Mode Hover Effect */
+.container.active .left-menu-icon-wrapper:hover .left-menu-icon {
+  color: #4dbf00; /* Change icon color on hover in light mode */
+  transform: scale(1.2); /* Slightly increase the size on hover in light mode */
+}
+
+.container.active .left-menu-icon::after {
+  background-color: rgba(255, 255, 255, 0.8); /* Light mode tooltip background */
+  color: black;
+}
+
+/* Toggle Button Styling */
+.toggle {
+  width: 40px;
+  height: 20px;
+  background-color: white;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-icon {
+  color: goldenrod;
+}
+
+.toggle-ball {
+  width: 18px;
+  height: 18px;
+  background-color: black;
+  position: absolute;
+  right: 1px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.toggle-ball.active {
+  background-color: white;
+  transform: translateX(-20px);
+}
+
+.toggle.active {
+  background-color: black;
+}
+
+/* Movie List and Content Styling */
+.container {
+  background-color: #151515;
+  min-height: calc(100vh - 50px);
+  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.content-container {
+  margin-left: 50px;
+}
+
+.featured-content {
+  height: 50vh;
+  padding: 50px;
+}
+
+.featured-title {
+  width: 200px;
+}
+
+.featured-desc {
+  width: 500px;
+  color: lightgray;
+  margin: 30px 0;
+}
+
+.featured-button {
+  background-color: #4dbf00;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-weight: bold;
+}
+
+.movie-list-container {
+  padding: 0 20px;
+}
+
+.movie-list-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.movie-list {
+  display: flex;
+  align-items: center;
+  height: 300px;
+  transform: translateX(0);
+  transition: all 1s ease-in-out;
+}
+
+.movie-list-item {
+  margin-right: 30px;
+  position: relative;
+}
+
+.movie-list-item:hover .movie-list-item-img {
+  transform: scale(1.2);
+  margin: 0 30px;
+  opacity: 0.5;
+}
+
+.movie-list-item:hover .movie-list-item-title,
+.movie-list-item:hover .movie-list-item-desc,
+.movie-list-item:hover .movie-list-item-button {
+  opacity: 1;
+}
+
+.movie-list-item-img {
+  transition: all 1s ease-in-out;
+  width: 270px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.movie-list-item-title {
+  background-color: #333;
+  padding: 0 10px;
+  font-size: 32px;
+  font-weight: bold;
+  position: absolute;
+  top: 10%;
+  left: 50px;
+  opacity: 0;
+  transition: 1s all ease-in-out;
+}
+
+.movie-list-item-desc {
+  background-color: #333;
+  padding: 10px;
+  font-size: 14px;
+  position: absolute;
+  top: 30%;
+  left: 50px;
+  width: 230px;
+  opacity: 0;
+  transition: 1s all ease-in-out;
+}
+
+.movie-list-item-button {
+  padding: 10px;
+  background-color: #4dbf00;
+  color: black;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  bottom: 20px;
+  left: 50px;
+  opacity: 0;
+  transition: 1s all ease-in-out;
+}
+
+.arrow {
+  font-size: 120px;
+  position: absolute;
+  top: 90px;
+  right: 0;
+  color: lightgray;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.arrow:hover {
+  color: #4dbf00;
+}
+
+.container.active {
+  background-color: white;
+  color: black;
+}
+
+.movie-list-title.active {
+  color: black;
+}
+
+/* Media Queries */
+@media only screen and (max-width: 940px) {
+  .menu-container {
+      display: none;
+  }
+}
+

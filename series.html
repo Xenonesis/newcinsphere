@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies - CineSphere</title>
+    <style>
+        /* General Reset */
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #151515;
+  transition: background-color 0.3s ease;
+}
+
+.navbar {
+  width: 100%;
+  height: 50px;
+  background-color: black;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  padding: 0 50px;
+  height: 100%;
+  color: white;
+  font-family: "Sen", sans-serif;
+  transition: color 0.3s ease;
+}
+
+.logo-container {
+  flex: 1;
+}
+
+.logo {
+  font-size: 30px;
+  color: #4dbf00;
+  transition: color 0.3s ease;
+}
+
+.menu-container {
+  flex: 6;
+}
+
+.menu-list {
+  display: flex;
+  list-style: none;
+}
+
+.menu-list-item {
+  margin-right: 30px;
+  position: relative;
+}
+
+.menu-list-item a {
+  text-decoration: none;
+  color: white; /* Default color for dark mode */
+  font-weight: bold;
+  padding: 10px;
+  display: block;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.menu-list-item a:hover {
+  color: #4dbf00;
+  transform: translateY(-2px);
+}
+
+.menu-list-item.active a {
+  color: #4dbf00;
+  font-weight: bold;
+}
+
+.menu-list-item::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: #4dbf00;
+  left: 50%;
+  bottom: -5px;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.menu-list-item:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Light Mode Overrides */
+.container.active .navbar {
+  background-color: white;
+}
+
+.container.active .navbar-container {
+  color: black; /* Text color for light mode */
+}
+
+.container.active .menu-list-item a {
+  color: black; /* Link color for light mode */
+}
+
+.container.active .menu-list-item a:hover {
+  color: #4dbf00; /* Hover color for light mode */
+}
+
+/* Profile Section */
+.profile-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.profile-text-container {
+  margin-right: 10px;
+  color: white;
+}
+
+.profile-picture-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-picture {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.profile-picture:hover {
+  transform: scale(1.1);
+}
+
+.logout-popup {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: #333;
+  border-radius: 5px;
+  padding: 10px;
+  display: none;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.profile-picture-container:hover .logout-popup {
+  display: block;
+}
+
+.logout-button {
+  background-color: #4dbf00;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #3da500;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(-10px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 50px;
+  height: 100%;
+  background-color: black;
+  position: fixed;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  transition: background-color 0.3s ease;
+}
+
+.left-menu-icon-wrapper {
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-menu-icon {
+  color: white;
+  font-size: 24px;
+  transition: color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Hover Effect for Icons */
+.left-menu-icon-wrapper:hover .left-menu-icon {
+  color: #4dbf00; /* Change icon color on hover */
+  transform: scale(1.2); /* Slightly increase the size on hover */
+}
+
+/* Tooltip Styling */
+.left-menu-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 60px; /* Position tooltip to the right of the icon */
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.left-menu-icon-wrapper:hover .left-menu-icon::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(10px); /* Slide tooltip in on hover */
+}
+
+/* Light Mode Overrides for Sidebar */
+.container.active .sidebar {
+  background-color: white;
+}
+
+.container.active .left-menu-icon {
+  color: black;
+}
+
+/* Light Mode Hover Effect */
+.container.active .left-menu-icon-wrapper:hover .left-menu-icon {
+  color: #4dbf00; /* Change icon color on hover in light mode */
+  transform: scale(1.2); /* Slightly increase the size on hover in light mode */
+}
+
+.container.active .left-menu-icon::after {
+  background-color: rgba(255, 255, 255, 0.8); /* Light mode tooltip background */
+  color: black;
+}
+
+/* Toggle Button Styling */
+.toggle {
+  width: 40px;
+  height: 20px;
+  background-color: white;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-icon {
+  color: goldenrod;
+}
+
+.toggle-ball {
+  width: 18px;
+  height: 18px;
+  background-color: black;
+  position: absolute;
+  right: 1px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.toggle-ball.active {
+  background-color: white;
+  transform: translateX(-20px);
+}
+
+.toggle.active {
+  background-color: black;
+}
+
+/* Movie List and Content Styling */
+.container {
+  background-color: #151515;
+  min-height: calc(100vh - 50px);
+  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.content-container {
+  margin-left: 50px;
+}
+
+.featured-content {
+  height: 50vh;
+  padding: 50px;
+}
+
+.featured-title {
+  width: 200px;
+}
+
+.featured-desc {
+  width: 500px;
+  color: lightgray;
+  margin: 30px 0;
+}
+
+.featured-button {
+  background-color: #4dbf00;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-weight: bold;
+}
+
+.movie-list-container {
+  padding: 0 20px;
+}
+
+.movie-list-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.movie-list {
+  display: flex;
+  align-items: center;
+  height: 300px;
+  transform: translateX(0);
+  transition: all 1s ease-in-out;
+}
+
+.movie-list-item {
+  margin-right: 30px;
+  position: relative;
+}
+
+.movie-list-item:hover .movie-list-item-img {
+  transform: scale(1.2);
+  margin: 0 30px;
+  opacity: 0.5;
+}
+
+.movie-list-item:hover .movie-list-item-title,
+.movie-list-item:hover .movie-list-item-desc,
+.movie-list-item:hover .movie-list-item-button {
+  opacity: 1;
+}
+
+.movie-list-item-img {
+  transition: all 1s ease-in-out;
+  width: 270px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.movie-list-item-title {
+  background-color: #333;
+  padding: 0 10px;
+  font-size: 32px;
+  font-weight: bold;
+  position: absolute;
+  top: 10%;
+  left: 50px;
+  opacity: 0;
+  transition: 1s all ease-in-out;
+}
+
+.movie-list-item-desc {
+  background-color: #333;
+  padding: 10px;
+  font-size: 14px;
+  position: absolute;
+  top: 30%;
+  left: 50px;
+  width: 230px;
+  opacity: 0;
+  transition: 1s all ease-in-out;
+}
+
+.movie-list-item-button {
+  padding: 10px;
+  background-color: #4dbf00;
+  color: black;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  bottom: 20px;
+  left: 50px;
+  opacity: 0;
+  transition: 1s all ease-in-out;
+}
+
+.arrow {
+  font-size: 120px;
+  position: absolute;
+  top: 90px;
+  right: 0;
+  color: lightgray;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.arrow:hover {
+  color: #4dbf00;
+}
+
+.container.active {
+  background-color: white;
+  color: black;
+}
+
+.movie-list-title.active {
+  color: black;
+}
+
+/* Media Queries */
+@media only screen and (max-width: 940px) {
+  .menu-container {
+      display: none;
+  }
+}
+
+
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-container">
+            <div class="logo-container">
+                <h1 class="logo">CineSphere</h1>
+            </div>
+            <div class="menu-container">
+                <ul class="menu-list">
+                    <li class="menu-list-item"><a href="index.html">Home</a></li>
+                    <li class="menu-list-item"><a href="movies.html">Movies</a></li>
+                    <li class="menu-list-item"><a href="series.html">Series</a></li>
+                    <li class="menu-list-item"><a href="popular.html">Popular</a></li>
+                    <li class="menu-list-item"><a href="trends.html">Trends</a></li>
+                </ul>
+            </div>
+            <div class="profile-container">
+                <img class="profile-picture" src="img/profile.jpg" alt="Profile Picture">
+                <div class="profile-text-container">
+                    <span class="profile-text">Profile</span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <div class="toggle">
+                    <i class="fas fa-moon toggle-icon"></i>
+                    <i class="fas fa-sun toggle-icon"></i>
+                    <div class="toggle-ball"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#search" class="left-menu-icon-wrapper">
+            <i class="left-menu-icon fas fa-search" data-tooltip="Search"></i>
+        </a>
+        <a href="index.html" class="left-menu-icon-wrapper">
+            <i class="left-menu-icon fas fa-home" data-tooltip="Home"></i>
+        </a>
+        <a href="#users" class="left-menu-icon-wrapper">
+            <i class="left-menu-icon fas fa-users" data-tooltip="Users"></i>
+        </a>
+        <a href="#bookmark" class="left-menu-icon-wrapper">
+            <i class="left-menu-icon fas fa-bookmark" data-tooltip="Bookmark"></i>
+        </a>
+        <a href="#tv" class="left-menu-icon-wrapper">
+            <i class="left-menu-icon fas fa-tv" data-tooltip="TV"></i>
+        </a>
+        <a href="#timer" class="left-menu-icon-wrapper">
+            <i class="left-menu-icon fas fa-hourglass-start" data-tooltip="Timer"></i>
+        </a>
+        <a href="#cart" class="left-menu-icon-wrapper">
+            <i class="left-menu-icon fas fa-shopping-cart" data-tooltip="Cart"></i>
+        </a>
+    </div>
+
+
+    <!-- Content -->
+    <div class="container">
+        <div class="content-container">
+            <!-- Featured Movie Section -->
+            <div class="featured-content" style="background: linear-gradient(to bottom, rgba(0,0,0,0), #151515), url('img/f-1.jpg');">
+                <img class="featured-title" src="img/f-t-1.png" alt="Featured Movie Title">
+                <p class="featured-desc">Django Unchained: A riveting tale of freedom, revenge, and justice, with unforgettable characters and powerful performances.</p>
+                <button class="featured-button"><a href="https://drive.google.com/file/d/1TcaAiEQsZbRkNoCsPfpHWbSBXqbeFFH9/view?usp=sharing" target="_blank">Watch</a></button>
+            </div>
+
+            <!-- Movie List -->
+            <div class="movie-list-container">
+                <h1 class="movie-list-title">NEW RELEASES</h1>
+                <div class="movie-list-wrapper">
+                    <div class="movie-list">
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src="img/12thfail.jpg" alt="12th Fail">
+                            <span class="movie-list-item-title">12th Fail</span>
+                            <p class="movie-list-item-desc">"12th Fail" portrays the inspiring tale of Manoj Sharma's rise from failure to IPS officer success.</p>
+                            <button class="movie-list-item-button"><a href="https://drive.google.com/file/d/1M5ZhB41N2q9ow52OPmfaTgRqDY938Sli/view?usp=drive_link" target="_blank">Watch</a></button>
+                        </div>
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src="img/2.jpeg" alt="Star Wars">
+                            <span class="movie-list-item-title">Star Wars</span>
+                            <p class="movie-list-item-desc">"Star Wars: Epic space saga featuring Jedi, Sith, rebellion, and the battle for galactic supremacy."</p>
+                            <button class="movie-list-item-button"><a href="https://drive.google.com/file/d/1TcaAiEQsZbRkNoCsPfpHWbSBXqbeFFH9/view?usp=sharing" target="_blank">Watch</a></button>
+                        </div>
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src="img/war hourse1.jpg" alt="War Horse">
+                            <span class="movie-list-item-title">War Horse</span>
+                            <p class="movie-list-item-desc">"War Horse: A poignant tale of friendship, loyalty, and bravery set amidst the chaos of war."</p>
+                            <button class="movie-list-item-button"><a href="https://drive.google.com/file/d/1QeDQkCyqB97W9ajWqIzAaay4OVZtJNMS/view?usp=drive_link" target="_blank">Watch</a></button>
+                        </div>
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src="img/4.jpg" alt="1917">
+                            <span class="movie-list-item-title">1917</span>
+                            <button class="movie-list-item-button"><a href="https://drive.google.com/file/d/1QeDQkCyqB97W9ajWqIzAaay4OVZtJNMS/view?usp=drive_link" target="_blank">Watch</a></button>
+                        </div>
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src="img/5.jpg" alt="Avengers">
+                            <span class="movie-list-item-title">Avengers</span>
+                            <p class="movie-list-item-desc">"Heroes unite, Avengers fight, saving Earth's plight."</p>
+                            <button class="movie-list-item-button"><a href="https://drive.google.com/file/d/1vll9hWwcNoCKZv1PaxAuT1XOCmNEA6-7/view?usp=drive_link" target="_blank">Watch</a></button>
+                        </div>
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src="img/6.jpg" alt="Her">
+                            <span class="movie-list-item-title">Her</span>
+                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <button class="movie-list-item-button"><a href="#" target="_blank">Watch</a></button>
+                        </div>
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src="img/7.jpg" alt="Her">
+                            <span class="movie-list-item-title">Her</span>
+                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <button class="movie-list-item-button"><a href="#" target="_blank">Watch</a></button>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+            </div>
+
+            <!-- Another Movie List -->
+            <div class="movie-list-container">
+                <h1 class="movie-list-title">NEW RELEASES</h1>
+                <div class="movie-list-wrapper">
+                    <div class="movie-list">
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src="img/8.jpg" alt="Her">
+                            <span class="movie-list-item-title">Her</span>
+                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <button class="movie-list-item-button"><a href="#" target="_blank">Watch</a></button>
+                        </div>
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src="img/9.jpg" alt="Her">
+                            <span class="movie-list-item-title">Her</span>
+                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <button class="movie-list-item-button"><a href="#" target="_blank">Watch</a></button>
+                        </div>
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src="img/10.jpg" alt="Her">
+                            <span class="movie-list-item-title">Her</span>
+                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <button class="movie-list-item-button"><a href="#" target="_blank">Watch</a></button>
+                        </div>
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src="img/11.jpg" alt="Her">
+                            <span class="movie-list-item-title">Her</span>
+                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <button class="movie-list-item-button"><a href="#" target="_blank">Watch</a></button>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.querySelector('.toggle');
+    const body = document.body;
+    const ball = document.querySelector('.toggle-ball');
+    const items = document.querySelectorAll(
+        ".container, .movie-list-title, .navbar-container, .sidebar, .left-menu-icon, .toggle"
+    );
+
+    // Check for saved theme preference in local storage
+    if (localStorage.getItem('theme') === 'dark') {
+        body.classList.add('dark-mode');
+        items.forEach(item => item.classList.add('active'));
+        ball.classList.add('active');
+    }
+
+    // Toggle dark/light mode
+    toggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        items.forEach(item => item.classList.toggle('active'));
+        ball.classList.toggle('active');
+        
+        // Save theme preference
+        if (body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    // Handle arrows for movie lists
+    const arrows = document.querySelectorAll(".arrow");
+    const movieLists = document.querySelectorAll(".movie-list");
+
+    arrows.forEach((arrow, i) => {
+        const itemNumber = movieLists[i].querySelectorAll("img").length;
+        let clickCounter = 0;
+        arrow.addEventListener("click", () => {
+            const ratio = Math.floor(window.innerWidth / 270);
+            clickCounter++;
+            if (itemNumber - (4 + clickCounter) + (4 - ratio) >= 0) {
+                movieLists[i].style.transform = `translateX(${
+                    movieLists[i].computedStyleMap().get("transform")[0].x.value - 300
+                }px)`;
+            } else {
+                movieLists[i].style.transform = "translateX(0)";
+                clickCounter = 0;
+            }
+        });
+    });
+
+    // Navbar link active state
+    const navLinks = document.querySelectorAll('nav ul li a');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // Remove 'active' class from all links
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Add 'active' class to the clicked link
+            this.classList.add('active');
+        });
+    });
+
+    // Logout popup on hover
+    const profilePictureContainer = document.querySelector('.profile-picture-container');
+    const logoutPopup = document.querySelector('.logout-popup');
+
+    profilePictureContainer.addEventListener('mouseover', () => {
+        logoutPopup.style.display = 'block';
+    });
+
+    profilePictureContainer.addEventListener('mouseleave', () => {
+        logoutPopup.style.display = 'none';
+    });
+
+    // Logout button click event (optional)
+    const logoutButton = document.querySelector('.logout-button');
+
+    logoutButton.addEventListener('click', () => {
+        // Implement logout functionality here
+        alert('Logged out');
+    });
+
+    // Sidebar smooth scrolling functionality
+    document.querySelectorAll('.left-menu-icon-wrapper').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            // Prevent default anchor click behavior
+            e.preventDefault();
+
+            // Get the target element's ID from the href attribute
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+
+            // If the target element exists, scroll to it smoothly
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Video playback functionality
+    window.playVideo = function(url) {
+        const videoPlayer = document.getElementById('videoPlayer');
+        const video = document.getElementById('video');
+        video.src = url;
+        videoPlayer.style.display = 'block';
+    };
+
+    window.closeVideo = function() {
+        const videoPlayer = document.getElementById('videoPlayer');
+        const video = document.getElementById('video');
+        video.pause();
+        video.currentTime = 0;
+        videoPlayer.style.display = 'none';
+    };
+});
+
+    </script>
+
+    <!-- FontAwesome Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
